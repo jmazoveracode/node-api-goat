@@ -20,5 +20,9 @@ steps:
   displayName: 'Build'
 
 - script: |
-    npm test
+    wrap([$class: 'VeracodeInteractiveBuildWrapper, location: 'localhost', port: '10010']) 
+        {  
+          sh 'curl -sSL https://s3.us-east-2.amazonaws.com/app.veracode-iast.io/iast-ci.sh | sh'
+          sh ' LD_LIBRARY_PATH=$PWD mocha --require ./agent_nodejs_linux64 test/index.js'
+        }
   displayName: 'Test'
